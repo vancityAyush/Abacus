@@ -248,19 +248,20 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }
 
         double calculate(){
-            final String BODMAS = ".÷x+-";
+            final String BODMAS [] = {".","÷x","+-"};
             double result=0d;
             int index=0;
-                for (char sign : BODMAS.toCharArray()) {
+                for (String sign : BODMAS) {
                     int size=entries.size();
                     for (int i=0;i<size;i++) {
                         Object obj = entries.get(i);
                         if (obj instanceof Character) {
-                            if ((Character) obj == sign) {
+                            char ch= (Character) obj;
+                            if (sign.indexOf(ch)>=0) {
                                 double n1 = (double) entries.get(index - 1);
                                 double n2 = (double) entries.get(index + 1);
                                 double tempResult = 0d;
-                                switch (sign) {
+                                switch (ch) {
                                     case '÷':
                                         tempResult = n1 / n2;
                                         break;
@@ -284,6 +285,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                                 entries.remove(index);
                                 entries.set(index - 1, tempResult);
                                 size = entries.size();
+                                i=0;
+                                index=0;
                             }
                         }
                         index++;
@@ -291,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                     index=0;
                 }
 
-            DecimalFormat df = new DecimalFormat("#.###");
+            DecimalFormat df = new DecimalFormat("#.##");
             df.setRoundingMode(RoundingMode.CEILING);
             result = Double.parseDouble(df.format(entries.get(0)));
             //result= Double.parseDouble(df.format(result));
